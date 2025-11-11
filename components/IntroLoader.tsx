@@ -18,7 +18,7 @@ const IntroLoader: React.FC = () => {
     return (
         <div className={`fixed inset-0 bg-gradient-to-br from-slate-900 to-[#020420] flex flex-col items-center justify-center z-[100] ${isFadingOut ? 'animate-intro-fade-out' : 'animate-bg-pan'}`}>
             <div className="text-center p-4">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight animate-intro-fade-in-scale">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight animate-intro-fade-in-scale">
                     Metodo Cesgranrio Decifrado
                 </h1>
                 <p 

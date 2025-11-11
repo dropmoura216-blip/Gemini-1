@@ -1,3 +1,4 @@
+
 import React from 'react';
 import type { FunnelStep } from './types';
 
@@ -26,11 +27,10 @@ export const FUNNEL_STEPS: FunnelStep[] = [
     headline: (
       <>
         O Método Cesgranrio Decifrado foi criado para{' '}
-        <span className="text-amber-400">blindar você das 3 armadilhas</span> que eliminam 92% dos engenheiros.
+        <span className="text-amber-400">blindar você das 3 armadilhas</span> que vão eliminar 92% dos engenheiros no concurso da Caixa.
       </>
     ),
-    subheadline: "Responda 3 perguntas rápidas para desbloquear a lógica do método e entender por que ele é sua única rota segura para a vaga de R$ 16.495.",
-    ctaText: "REVELAR A LÓGICA DO MÉTODO",
+    ctaText: "CONHECER O MÉTODO",
   },
   {
     step: 2,
@@ -81,7 +81,7 @@ export const FUNNEL_STEPS: FunnelStep[] = [
         <span className="text-amber-400 font-bold">A Margem de Erro Cesgranrio é Zero.</span> Sua aprovação exige um Método Decifrado.
       </>
     ),
-    ctaText: "CONHECER O MÉTODO",
+    ctaText: "CONTINUAR",
   },
   {
     step: 6,
@@ -119,7 +119,7 @@ export const FUNNEL_STEPS: FunnelStep[] = [
            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
          </svg>
          <div>
-           <h3 className="font-bold text-white">Garantia Incondicional de 7 Dias</h3>
+           <h3 className="font-bold text-white text-base">Garantia Incondicional de 7 Dias</h3>
            <p className="text-slate-300 text-sm">Seu risco é zero. Se não for a estratégia mais precisa que você já viu, peça seu dinheiro de volta.</p>
          </div>
        </div>

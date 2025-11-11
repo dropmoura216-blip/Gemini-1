@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface StepContainerProps {
@@ -12,7 +11,7 @@ const StepContainer: React.FC<StepContainerProps> = ({ children, step }) => {
       key={step} 
       className="min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 text-center bg-gradient-to-br from-slate-900 to-[#020420] text-white animate-fade-in"
     >
-      <div className="max-w-3xl w-full">
+      <div className="max-w-2xl w-full flex flex-col items-center">
         {children}
       </div>
     </div>

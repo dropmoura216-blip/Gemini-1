@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import type { FunnelStep } from './types';
 
@@ -26,8 +27,8 @@ export const FUNNEL_STEPS: FunnelStep[] = [
     preheadline: "Para Engenheiros(as) Civis que buscam um salário de R$ 16.495/mês",
     headline: (
       <>
-        O Método Cesgranrio Decifrado foi criado para{' '}
-        <span className="text-amber-400">blindar você das 3 armadilhas</span> que vão eliminar 92% dos engenheiros no concurso da Caixa.
+        A Cesgranrio usa 3 armadilhas para eliminar 92% dos engenheiros.{' '}
+        <span className="text-amber-400">O Método Decifrado blinda você contra elas.</span>
       </>
     ),
     ctaText: "CONHECER O MÉTODO",

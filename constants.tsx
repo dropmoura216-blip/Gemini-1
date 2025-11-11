@@ -92,17 +92,17 @@ export const FUNNEL_STEPS: FunnelStep[] = [
       {
         icon: <ChartIcon />,
         title: "Mapeamento de Recorrência",
-        description: "Analisamos +5.000 questões para identificar os 20% de tópicos que correspondem a 80% da sua prova.",
+        description: "Foco a Laser 80/20. Analisamos +5.000 questões para você estudar apenas os tópicos que mais caem e garantir sua pontuação.",
       },
       {
         icon: <TargetIcon />,
         title: "Conteúdo Verticalizado",
-        description: "Aulas e materiais 100% focados no que a Cesgranrio cobra, sem perda de tempo com conteúdo inútil.",
+        description: "Estudo sem 'gordura'. Aulas e materiais 100% focados no padrão Cesgranrio, para você não perder um minuto com o que não cai.",
       },
       {
         icon: <DocumentIcon />,
         title: "Simulação de Provas",
-        description: "Simulados que replicam a dificuldade, o tempo e o estilo exato das questões que você vai encontrar.",
+        description: "Simulação Realista. Nossos simulados replicam a pressão e o estilo da prova real, para que o dia do concurso seja apenas mais um treino.",
       },
     ],
     ctaText: "QUERO ESSA ESTRATÉGIA",
@@ -131,10 +131,10 @@ export const FUNNEL_STEPS: FunnelStep[] = [
     step: 8,
     headline: (
         <>
-            Sua vaga de <span className="text-amber-400">R$ 16.495,00/mês</span> está a um passo.
+            A escolha que <span className="text-amber-400">define sua aprovação</span> está em suas mãos.
         </>
     ),
-    subheadline: "O custo de uma estratégia errada é a sua aprovação. O investimento em uma estratégia validada é o seu futuro.",
-    ctaText: "GARANTIR MINHA VAGA E DECIFRAR A CESGRANRIO AGORA",
+    subheadline: "Você vai arriscar o seu futuro ou vai investir nele?",
+    ctaText: "QUERO DECIFRAR A CESGRANRIO E GARANTIR MINHA VAGA",
   },
 ];

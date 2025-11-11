@@ -9,7 +9,9 @@ const StepContainer: React.FC<StepContainerProps> = ({ children, step }) => {
   return (
     <div 
       key={step} 
-      className="min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 text-center bg-gradient-to-br from-slate-900 to-[#020420] text-white animate-fade-in"
+      // For the first "hero" step, add extra bottom padding. 
+      // This makes the flex container optically center the content higher up, which is more visually pleasing.
+      className={`min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 text-center bg-gradient-to-br from-slate-900 to-[#020420] text-white animate-fade-in ${step === 1 ? 'pb-24' : ''}`}
     >
       <div className="max-w-2xl w-full flex flex-col items-center">
         {children}

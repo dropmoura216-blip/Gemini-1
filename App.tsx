@@ -21,7 +21,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const introTimer = setTimeout(() => {
       setShowIntro(false);
-    }, 6000); // A introdução dura 6 segundos
+    }, 4000); // A introdução dura 4 segundos
 
     return () => clearTimeout(introTimer);
   }, []);
@@ -85,18 +85,22 @@ const App: React.FC = () => {
 
     return (
       <StepContainer step={stepData.step}>
-        {stepData.preheadline && (
-          <p className="text-base sm:text-lg font-semibold text-amber-400 tracking-wider uppercase mb-3">
-            {stepData.preheadline}
-          </p>
-        )}
-        <h1 className="text-[1.75rem] sm:text-[2.125rem] md:text-[2.75rem] font-extrabold text-white tracking-tight leading-snug">
-          {stepData.headline}
-        </h1>
-        {stepData.subheadline && (
-          <p className="mt-4 text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">
-            {stepData.subheadline}
-          </p>
+        {currentStep !== 9 && (
+          <>
+            {stepData.preheadline && (
+              <p className="text-base sm:text-lg font-semibold text-amber-400 tracking-wider uppercase mb-3">
+                {stepData.preheadline}
+              </p>
+            )}
+            <h1 className="text-[1.75rem] sm:text-[2.125rem] md:text-[2.75rem] font-extrabold text-white tracking-tight leading-snug">
+              {stepData.headline}
+            </h1>
+            {stepData.subheadline && (
+              <p className="mt-4 text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">
+                {stepData.subheadline}
+              </p>
+            )}
+          </>
         )}
 
         {/* Quiz Content */}
@@ -117,7 +121,7 @@ const App: React.FC = () => {
             ))}
           </div>
         )}
-
+        
         {/* Testimonial Content */}
         {stepData.testimonial && (
             <div className="mt-8 max-w-2xl mx-auto w-full">
@@ -129,54 +133,122 @@ const App: React.FC = () => {
                 </blockquote>
             </div>
         )}
-        
-        {/* Final Offer */}
-        {currentStep === 8 && (
-            <div className="mt-6 max-w-4xl mx-auto w-full text-left">
-                {/* Comparison Section */}
-                <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-                    {/* Option 1: Without Method */}
-                    <div className="flex-1 bg-slate-800/40 border border-red-500/30 rounded-lg p-4 transform transition-transform hover:scale-105 hover:border-red-500/50">
-                        <h3 className="font-bold text-lg text-red-400 mb-3 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                            OPÇÃO 1: Tentar a Sorte
-                        </h3>
-                        <ul className="list-none space-y-2 text-slate-300 text-sm">
-                            <li>- Enfrentar <span className="font-bold text-white">500+ candidatos por vaga</span> sozinho.</li>
-                            <li>- Arriscar <span className="font-bold text-white">mais 12 anos de espera</span> por uma nova chance.</li>
-                            <li>- Ser um dos <span className="font-bold text-white">92% eliminados</span> pelas armadilhas da Cesgranrio.</li>
-                        </ul>
-                    </div>
-                    {/* Option 2: With Method */}
-                    <div className="flex-1 bg-slate-800 border border-amber-400/60 rounded-lg p-4 transform transition-transform hover:scale-105 hover:border-amber-400">
-                         <h3 className="font-bold text-lg text-amber-300 mb-3 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            OPÇÃO 2: Decifrar a Banca
-                        </h3>
-                        <ul className="list-none space-y-2 text-slate-300 text-sm">
-                            <li>- Ter a estratégia exata para <span className="font-bold text-white">superar a concorrência</span>.</li>
-                            <li>- Transformar a espera em <span className="font-bold text-white">aprovação e posse</span>.</li>
-                            <li>- Blindar-se contra as armadilhas e <span className="font-bold text-white">garantir a vaga</span>.</li>
-                        </ul>
-                    </div>
-                </div>
 
-                {/* Offer Section */}
-                <div className="mt-6 bg-gradient-to-t from-slate-900 to-slate-800/80 border border-slate-700 rounded-xl p-5 text-center shadow-2xl shadow-black/30">
-                    <h3 className="text-xl font-bold text-white">Seu Acesso Imediato à Estratégia de Aprovação</h3>
-                    <div className="my-3 text-center">
-                         <p className="text-lg text-slate-400 line-through">De R$ 297,00</p>
-                         <p className="text-white text-sm">Por apenas 1x de</p>
-                         <p className="text-3xl font-bold text-amber-400">R$ 27,90</p>
+        {/* Step 8: The Choice */}
+        {currentStep === 8 && (
+            <div className="mt-8 w-full max-w-4xl mx-auto flex flex-col md:flex-row gap-6">
+                {/* Option 1 (Good): Ser Aprovado */}
+                <button
+                    onClick={handleNextStep}
+                    className="w-full flex-1 text-left bg-slate-800 border-2 border-amber-400/60 rounded-lg p-6 flex flex-col transform transition-all duration-300 hover:scale-[1.03] hover:border-amber-400 hover:shadow-2xl hover:shadow-amber-500/20 focus:outline-none focus:ring-4 focus:ring-amber-500/50"
+                >
+                    <div className="flex-grow">
+                        <h3 className="font-bold text-lg text-amber-300 mb-3 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            OPÇÃO 1: Ser Aprovado(a)
+                        </h3>
+                        <ul className="list-none space-y-2 text-slate-300 text-sm">
+                            <li>- Salário inicial de <span className="font-bold text-white">R$ 16.495/mês</span> <span className="font-medium text-amber-300 opacity-90">+ R$ 2.000 VA</span>.</li>
+                            <li>- <span className="font-bold text-white">Estabilidade e segurança</span> para o seu futuro.</li>
+                            <li>- Benefícios exclusivos e <span className="font-bold text-white">plano de carreira</span> na Caixa.</li>
+                        </ul>
                     </div>
-                    <CountdownTimer />
+                    <div className="mt-5 border-t border-slate-700/60 pt-4 flex items-center justify-center gap-2 text-amber-300 font-semibold animate-pulse-gentle">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
+                        </svg>
+                        <span>Selecionar esta opção</span>
+                    </div>
+                </button>
+
+                {/* Option 2 (Bad): Tentar a Sorte */}
+                <div className="w-full flex-1 bg-slate-800/40 border border-red-500/30 rounded-lg p-6 opacity-80 text-left">
+                    <h3 className="font-bold text-lg text-red-400 mb-3 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        OPÇÃO 2: Tentar a Sorte
+                    </h3>
+                    <ul className="list-none space-y-2 text-slate-300 text-sm">
+                        <li>- Enfrentar <span className="font-bold text-white">500+ candidatos por vaga</span> sozinho.</li>
+                        <li>- Arriscar <span className="font-bold text-white">mais 12 anos de espera</span> por uma nova chance.</li>
+                        <li>- Ser um dos <span className="font-bold text-white">92% eliminados</span> pelas armadilhas da Cesgranrio.</li>
+                    </ul>
                 </div>
             </div>
         )}
 
+        {/* Step 9: Final Offer Page */}
+        {currentStep === 9 && (
+            <div className="max-w-3xl mx-auto w-full">
+                {/* Offer Section */}
+                <div className="bg-gradient-to-t from-slate-900 to-slate-800/80 border-2 border-amber-400 rounded-xl p-6 sm:p-8 text-center shadow-2xl shadow-amber-500/20 animate-fade-in">
+                    
+                    {stepData.preheadline && (
+                        <p className="text-base sm:text-lg font-semibold text-amber-400 tracking-wider uppercase mb-3">
+                            {stepData.preheadline}
+                        </p>
+                    )}
+                    <h1 className="text-[1.75rem] sm:text-[2.125rem] md:text-[2.75rem] font-extrabold text-white tracking-tight leading-snug">
+                        {stepData.headline}
+                    </h1>
+                    {stepData.subheadline && (
+                        <p className="mt-6 text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">
+                            {stepData.subheadline}
+                        </p>
+                    )}
 
-        {/* CTA Button (appears on non-quiz steps) */}
-        {!stepData.quiz && (
+                    <div className="w-24 h-1 bg-amber-400/30 rounded-full mx-auto my-10"></div>
+                    
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">O que você recebe com acesso imediato:</h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left my-6">
+                        <div className="bg-slate-800/60 p-4 rounded-lg border border-slate-700">
+                            <p className="font-bold text-amber-300">✓ Mapeamento 80/20</p>
+                            <p className="text-sm text-slate-300 mt-1">Foco total nos tópicos que a Cesgranrio realmente cobra.</p>
+                        </div>
+                        <div className="bg-slate-800/60 p-4 rounded-lg border border-slate-700">
+                            <p className="font-bold text-amber-300">✓ Conteúdo Verticalizado</p>
+                            <p className="text-sm text-slate-300 mt-1">Aulas e materiais sem enrolação, direto ao ponto.</p>
+                        </div>
+                        <div className="bg-slate-800/60 p-4 rounded-lg border border-slate-700">
+                            <p className="font-bold text-amber-300">✓ Simulados Realistas</p>
+                            <p className="text-sm text-slate-300 mt-1">Treino exaustivo no formato exato da prova.</p>
+                        </div>
+                    </div>
+                    
+                    <div className="my-10 text-center">
+                        <p className="text-lg text-slate-400 line-through">De R$ 297,00</p>
+                        <p className="text-white text-sm">Por apenas 1x de</p>
+                        <p className="text-5xl font-extrabold text-amber-400 my-1">R$ 27,90</p>
+                        <p className="text-slate-300 font-medium">(Seu novo salário paga isso em <span className="font-bold text-white">menos de 2 horas</span>)</p>
+                    </div>
+
+                    <CountdownTimer />
+
+                    <div className="mt-6">
+                        <button
+                            onClick={handleNextStep}
+                            className="w-full max-w-md mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
+                        >
+                            {stepData.ctaText}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Guarantee */}
+                <div className="flex items-center justify-center gap-4 mt-8 bg-slate-800/50 p-4 rounded-lg border border-slate-700 max-w-2xl mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div className="text-left">
+                        <h3 className="font-bold text-white text-base">Garantia Incondicional de 7 Dias</h3>
+                        <p className="text-slate-300 text-sm">Seu risco é zero. Se não for a estratégia mais precisa que você já viu, peça seu dinheiro de volta.</p>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* CTA Button (appears on non-quiz/non-choice/non-offer steps) */}
+        {!stepData.quiz && currentStep !== 8 && currentStep !== 9 && (
           <>
             {/* Normal button for step 6, shown for the first 3 seconds */}
             {currentStep === 6 && !showStickyButton && (
@@ -230,6 +302,20 @@ const App: React.FC = () => {
     }
     .animate-pulse-slow {
       animation: pulse-slow 3s infinite;
+    }
+
+    @keyframes pulse-gentle {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.85;
+            transform: scale(0.99);
+        }
+    }
+    .animate-pulse-gentle {
+        animation: pulse-gentle 2.5s infinite ease-in-out;
     }
 
     @keyframes notificationFadeIn {
@@ -313,7 +399,7 @@ const App: React.FC = () => {
         to { width: 100%; }
     }
     .animate-progress-bar {
-        animation: progress-bar 6s linear forwards;
+        animation: progress-bar 4s linear forwards;
     }
   `;
 
@@ -343,7 +429,7 @@ const App: React.FC = () => {
                         Sem problemas! Quero passar no concurso da Caixa.
                     </span>
                     <span className="text-sm font-medium text-slate-800/90 mt-1">
-                        E garantir meu salário de R$ 16.495/mês
+                        E garantir meu salário de R$ 16.495/mês + R$ 2.000 VA
                     </span>
                     </button>
                     <button

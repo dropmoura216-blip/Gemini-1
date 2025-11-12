@@ -19,7 +19,7 @@ export interface Pillar {
 
 export interface FunnelStep {
   step: number;
-  preheadline?: string;
+  preheadline?: string | React.ReactNode;
   headline: string | React.ReactNode;
   subheadline?: string | React.ReactNode;
   ctaText: string;

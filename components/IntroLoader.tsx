@@ -9,7 +9,7 @@ const IntroLoader: React.FC = () => {
         // Start fade out before the component is unmounted in App.tsx
         const timer = setTimeout(() => {
             setIsFadingOut(true);
-        }, 5500); // Start fade out after 5.5 seconds
+        }, 3500); // Start fade out after 3.5 seconds
 
         return () => {
             clearTimeout(timer);
@@ -28,12 +28,17 @@ const IntroLoader: React.FC = () => {
                 >
                     A oportunidade que Engenheiros(as) Civis esperaram por <span className="font-bold text-amber-300">12 anos</span>.
                 </p>
-                <p 
-                    className="text-xl sm:text-2xl text-amber-300 font-bold mt-2 animate-intro-fade-in-up" 
+                <div 
+                    className="mt-4 animate-intro-fade-in-up" 
                     style={{ animationDelay: '1.2s' }}
                 >
-                    Salário de R$ 16.495/mês.
-                </p>
+                    <p className="text-xl sm:text-2xl text-amber-300 font-bold">
+                        Salário de R$ 16.495/mês
+                    </p>
+                    <p className="text-base sm:text-lg text-slate-300 font-medium">
+                        + R$ 2.000 de Vale Alimentação
+                    </p>
+                </div>
             </div>
 
             {/* Progress Bar */}

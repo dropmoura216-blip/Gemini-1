@@ -24,10 +24,15 @@ const DocumentIcon = () => (
 export const FUNNEL_STEPS: FunnelStep[] = [
   {
     step: 1,
-    preheadline: "Para Engenheiros(as) Civis que buscam um salário de R$ 16.495/mês",
+    preheadline: (
+      <>
+        Para Engenheiros(as) Civis que buscam um salário de R$ 16.495/mês{" "}
+        <span className="opacity-80 font-medium">+ R$ 2.000 VA</span>
+      </>
+    ),
     headline: (
       <>
-        A Cesgranrio usa 3 armadilhas para eliminar 92% dos engenheiros.{' '}
+        A Cesgranrio usará 3 armadilhas para eliminar 92% dos engenheiros.{' '}
         <span className="text-amber-400">O Método Decifrado blinda você contra elas.</span>
       </>
     ),
@@ -63,7 +68,7 @@ export const FUNNEL_STEPS: FunnelStep[] = [
     step: 4,
     headline: "Diagnóstico Estratégico: Etapa 3 de 3",
     quiz: {
-      question: "Com apenas 103 vagas imediatas e um salário de R$ 16.495, qual sua posição sobre o risco?",
+      question: "Com apenas 103 vagas imediatas e um salário de R$ 16.495/mês + R$ 2.000 VA, qual sua posição sobre o risco?",
       options: [
         { text: "Estou disposto a arriscar com uma estratégia genérica e não validada." },
         { text: "A concorrência me assusta, mas confio que estudar 'muito' será o suficiente." },
@@ -109,32 +114,32 @@ export const FUNNEL_STEPS: FunnelStep[] = [
   },
   {
     step: 7,
-    headline: "Será que funciona? Veja quem já está no caminho certo.",
+    headline: "Não é sorte, é método. Veja quem já está na frente.",
     testimonial: {
-      text: "Eu estava perdido, estudando de tudo um pouco. O Método Cesgranrio Decifrado foi como um GPS para a aprovação. Em 4 meses, minha pontuação nos simulados dobrou.",
-      author: "João P., Aprovado no Banco do Brasil (Cesgranrio)",
+        text: "Eu estava perdido, estudando de tudo um pouco. O Método Cesgranrio Decifrado foi como um GPS para a aprovação. Em 4 meses, minha pontuação nos simulados dobrou.",
+        author: "João P., Aprovado no Banco do Brasil (Cesgranrio)",
     },
-    subheadline: (
-       <div className="flex items-center justify-center gap-4 mt-8 bg-slate-800/50 p-4 rounded-lg border border-slate-700">
-         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-         </svg>
-         <div>
-           <h3 className="font-bold text-white text-base">Garantia Incondicional de 7 Dias</h3>
-           <p className="text-slate-300 text-sm">Seu risco é zero. Se não for a estratégia mais precisa que você já viu, peça seu dinheiro de volta.</p>
-         </div>
-       </div>
-    ),
-    ctaText: "ESTOU SEGURO, QUERO MINHA VAGA",
+    ctaText: "QUERO SER O PRÓXIMO APROVADO",
   },
   {
     step: 8,
     headline: (
-        <>
-            A escolha que <span className="text-amber-400">define sua aprovação</span> está em suas mãos.
-        </>
+      <>
+          A escolha que <span className="text-amber-400">define sua aprovação</span> está em suas mãos.
+      </>
     ),
     subheadline: "Você vai arriscar o seu futuro ou vai investir nele?",
-    ctaText: "QUERO DECIFRAR A CESGRANRIO E GARANTIR MINHA VAGA",
+    ctaText: "FAZER A ESCOLHA CERTA", // Placeholder, this step has custom interaction
+  },
+  {
+    step: 9,
+    preheadline: "SUA VAGA ESTÁ A UMA DECISÃO DE DISTÂNCIA",
+    headline: (
+      <>
+        O método para <span className="text-amber-400">conquistar seu salário de R$ 16.495</span>.
+      </>
+    ),
+    subheadline: "Depois de 12 anos, a oportunidade apareceu. A concorrência será brutal. Esta é a sua única chance de usar uma estratégia precisa e deixar a sorte de lado. O tempo está acabando.",
+    ctaText: "GARANTIR MINHA VAGA POR R$ 27,90",
   },
 ];

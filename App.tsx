@@ -1,6 +1,7 @@
 
 
 
+
 import React, { useState, useEffect, useRef } from 'react';
 import ProgressBar from './components/ProgressBar';
 import StepContainer from './components/StepContainer';
@@ -8,6 +9,7 @@ import QuizOption from './components/QuizOption';
 import PillarCard from './components/PillarCard';
 import CountdownTimer from './components/CountdownTimer';
 import IntroLoader from './components/IntroLoader';
+import TestimonialCarousel from './components/TestimonialCarousel';
 import { FUNNEL_STEPS } from './constants';
 import { initSession, trackEvent } from './services/trackingService';
 import type { FunnelStep } from './types';
@@ -139,8 +141,8 @@ const App: React.FC = () => {
     // Hide sticky button immediately when step changes
     setShowStickyButton(false);
     
-    // If we are on step 6, set a timer to show it
-    if (currentStep === 6) {
+    // If we are on step 6 or 7, set a timer to show it
+    if (currentStep === 6 || currentStep === 7) {
         const timer = setTimeout(() => {
             setShowStickyButton(true);
         }, 3000);
@@ -251,16 +253,9 @@ const App: React.FC = () => {
           </div>
         )}
         
-        {/* Testimonial Content */}
-        {stepData.testimonial && (
-            <div className="mt-8 max-w-2xl mx-auto w-full">
-                <blockquote className="bg-slate-800/50 border-l-4 border-amber-400 p-6 rounded-r-lg italic text-slate-300 text-left">
-                    "{stepData.testimonial.text}"
-                    <cite className="block not-italic mt-4 font-semibold text-white">
-                        &mdash; {stepData.testimonial.author}
-                    </cite>
-                </blockquote>
-            </div>
+        {/* Testimonial Carousel */}
+        {stepData.testimonials && (
+          <TestimonialCarousel testimonials={stepData.testimonials} />
         )}
 
         {/* Step 8: The Choice */}
@@ -399,8 +394,8 @@ const App: React.FC = () => {
         {/* CTA Button (appears on non-quiz/non-choice/non-offer steps) */}
         {!stepData.quiz && currentStep !== 8 && currentStep !== 9 && (
           <>
-            {/* Normal button for step 6, shown for the first 3 seconds */}
-            {currentStep === 6 && !showStickyButton && (
+            {/* Normal button for steps 6 and 7, shown for the first 3 seconds */}
+            {(currentStep === 6 || currentStep === 7) && !showStickyButton && (
                 <div className="mt-8">
                     <div className="relative inline-block">
                         <button
@@ -413,9 +408,9 @@ const App: React.FC = () => {
                 </div>
             )}
             
-            {/* Sticky button for step 6 (after 3s), or normal buttons for other steps */}
-            {(currentStep !== 6 || (currentStep === 6 && showStickyButton)) && (
-                <div className={currentStep === 6 && showStickyButton
+            {/* Sticky button for steps 6 & 7 (after 3s), or normal buttons for other steps */}
+            {(currentStep !== 6 && currentStep !== 7 || showStickyButton) && (
+                <div className={(currentStep === 6 || currentStep === 7) && showStickyButton
                     ? "fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-900 to-slate-900/80 backdrop-blur-sm border-t border-slate-700 z-10 animate-fade-in-up-fast" 
                     : "mt-8"
                   }>

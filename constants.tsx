@@ -165,10 +165,14 @@ export const FUNNEL_STEPS: FunnelStep[] = [
   {
     step: 7,
     headline: "Não é sorte, é método. Veja quem já está na frente.",
-    testimonial: {
+    testimonials: [
+      { image: 'https://i.postimg.cc/G3ZxtV35/Generated_Image_November_13_2025_9_01AM_processed_lightpdf_com_1.png' },
+      { image: 'https://i.postimg.cc/CMWs5XLp/Imagem_do_Whats_App_de_2025_11_13_à_s_09_21_03_fc86a06a.jpg' },
+      {
         text: "Eu estava perdido, estudando de tudo um pouco. O Método Cesgranrio Decifrado foi como um GPS para a aprovação. Em 4 meses, minha pontuação nos simulados dobrou.",
         author: "João P., Aprovado no Banco do Brasil (Cesgranrio)",
-    },
+      },
+    ],
     ctaText: "QUERO SER O PRÓXIMO APROVADO",
   },
   {

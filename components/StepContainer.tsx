@@ -10,7 +10,7 @@ const StepContainer: React.FC<StepContainerProps> = ({ children, step }) => {
     if (step === 1) {
       return 'pb-24'; // Optically center hero content higher
     }
-    if (step === 6) {
+    if (step === 6 || step === 7) {
       return 'pt-16 pb-32'; // Add padding top for balance and bottom for sticky cta
     }
     if (step === 8) {

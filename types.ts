@@ -18,6 +18,12 @@ export interface Pillar {
   description: string;
 }
 
+export interface Testimonial {
+  text?: string;
+  author?: string;
+  image?: string;
+}
+
 export interface FunnelStep {
   step: number;
   preheadline?: string | React.ReactNode;
@@ -26,10 +32,7 @@ export interface FunnelStep {
   ctaText: string;
   quiz?: Quiz;
   pillars?: Pillar[];
-  testimonial?: {
-    text: string;
-    author: string;
-  };
+  testimonials?: Testimonial[];
 }
 
 // Analytics Types

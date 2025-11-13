@@ -16,6 +16,9 @@ const StepContainer: React.FC<StepContainerProps> = ({ children, step }) => {
     if (step === 8) {
       return 'pt-16'; // Push step content down for better visual balance
     }
+    if (step === 9) {
+      return 'pt-16 pb-24'; // Add padding for better spacing on final offer
+    }
     return '';
   };
   

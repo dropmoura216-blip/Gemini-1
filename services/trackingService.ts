@@ -1,9 +1,7 @@
 import type { SessionData, TrackingEvent } from '../types';
 import { db } from './firebase';
-// Fix: Use Firebase v8 syntax, which is more compatible if the project setup has versioning issues.
-// This replaces the modular v9 imports.
-import firebase from 'firebase/app';
-import 'firebase/firestore'; // Needed for side-effects and FieldValue
+// Use Firebase v9+ modular syntax for Firestore operations.
+import { doc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 
 const STORAGE_KEY = 'funnelAnalytics';
 
@@ -52,8 +50,8 @@ export const initSession = () => {
     setSessionData(session);
     
     // Save the entire new session object to Firestore (fire-and-forget)
-    // Fix: Use Firebase v8 syntax for setting a document.
-    db.collection('sessions').doc(session.sessionId).set(session)
+    // Use Firebase v9+ syntax for setting a document.
+    setDoc(doc(db, 'sessions', session.sessionId), session)
         .catch(error => {
             console.error("Error creating session in Firestore", error);
         });
@@ -120,17 +118,17 @@ export const trackEvent = (
   setSessionData(session);
 
   // Update in Firestore (fire-and-forget)
-  // Fix: Use Firebase v8 syntax for updating a document.
-  const sessionDocRef = db.collection('sessions').doc(session.sessionId);
-  sessionDocRef.update({
-      // Fix: Use Firebase v8 syntax for arrayUnion.
-      events: firebase.firestore.FieldValue.arrayUnion(newEvent)
+  // Use Firebase v9+ syntax for updating a document.
+  const sessionDocRef = doc(db, 'sessions', session.sessionId);
+  updateDoc(sessionDocRef, {
+      // Use Firebase v9+ syntax for arrayUnion.
+      events: arrayUnion(newEvent)
   }).catch(error => {
       // If the document doesn't exist, it might have been deleted or failed to create.
       // As a fallback, we can try to re-create it with the current session state.
       console.warn("Failed to update session in Firestore, attempting to recreate.", error);
-      // Fix: Use Firebase v8 syntax for setting a document with merge.
-      sessionDocRef.set(session, { merge: true })
+      // Use Firebase v9+ syntax for setting a document with merge.
+      setDoc(sessionDocRef, session, { merge: true })
           .catch(e => console.error("Error recreating session in Firestore", e));
   });
 };

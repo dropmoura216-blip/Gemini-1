@@ -1,7 +1,4 @@
 
-
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import ProgressBar from './components/ProgressBar';
 import StepContainer from './components/StepContainer';
@@ -172,7 +169,7 @@ const App: React.FC = () => {
     trackEvent('CHECKOUT_CLICK', { step: 9 });
     console.log('Redirecting to checkout...');
     // In a real scenario, you would redirect here:
-    // window.location.href = 'https://checkout.example.com';
+    window.location.href = 'https://compraseguraonline.org.ua/c/75f2b7ce4a';
   };
   
   const handleConfirmQuiz = () => {
@@ -290,61 +287,70 @@ const App: React.FC = () => {
 
         {/* Step 9: Final Offer Page */}
         {currentStep === 9 && (
-            <div className="max-w-3xl mx-auto w-full">
-                {/* Offer Section */}
-                <div className="bg-gradient-to-t from-slate-900 to-slate-800/80 border-2 border-amber-400 rounded-xl p-6 sm:p-8 text-center shadow-2xl shadow-amber-500/20 animate-fade-in">
-                    
-                    {stepData.preheadline && (
-                        <p className="text-base sm:text-lg font-semibold text-amber-400 tracking-wider uppercase mb-3">
-                            {stepData.preheadline}
-                        </p>
-                    )}
-                    <h1 className="text-[1.75rem] sm:text-[2.125rem] md:text-[2.75rem] font-extrabold text-white tracking-tight leading-snug">
-                        {stepData.headline}
-                    </h1>
-                    {stepData.subheadline && (
-                        <p className="mt-6 text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">
-                            {stepData.subheadline}
-                        </p>
-                    )}
+            <div className="max-w-3xl mx-auto w-full text-center animate-fade-in">
+                {/* Headlines */}
+                {stepData.preheadline && (
+                    <p className="text-base sm:text-lg font-semibold text-amber-400 tracking-wider uppercase mb-3">
+                        {stepData.preheadline}
+                    </p>
+                )}
+                <h1 className="text-[1.75rem] sm:text-[2.125rem] md:text-[2.75rem] font-extrabold text-white tracking-tight leading-snug">
+                    {stepData.headline}
+                </h1>
+                {stepData.subheadline && (
+                    <p className="mt-6 text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">
+                        {stepData.subheadline}
+                    </p>
+                )}
 
-                    <div className="w-24 h-1 bg-amber-400/30 rounded-full mx-auto my-10"></div>
-                    
-                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">O que você recebe com acesso imediato:</h3>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left my-6">
-                        <div className="bg-slate-800/60 p-4 rounded-lg border border-slate-700">
-                            <p className="font-bold text-amber-300">✓ Mapeamento 80/20</p>
-                            <p className="text-sm text-slate-300 mt-1">Foco total nos tópicos que a Cesgranrio realmente cobra.</p>
-                        </div>
-                        <div className="bg-slate-800/60 p-4 rounded-lg border border-slate-700">
-                            <p className="font-bold text-amber-300">✓ Conteúdo Verticalizado</p>
-                            <p className="text-sm text-slate-300 mt-1">Aulas e materiais sem enrolação, direto ao ponto.</p>
-                        </div>
-                        <div className="bg-slate-800/60 p-4 rounded-lg border border-slate-700">
-                            <p className="font-bold text-amber-300">✓ Simulados Realistas</p>
-                            <p className="text-sm text-slate-300 mt-1">Treino exaustivo no formato exato da prova.</p>
-                        </div>
+                <div className="w-24 h-1 bg-amber-400/30 rounded-full mx-auto my-10"></div>
+                
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">O que você recebe com acesso imediato:</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left my-6">
+                    <div className="bg-slate-800/60 p-4 rounded-lg border border-slate-700">
+                        <p className="font-bold text-amber-300">✓ Mapeamento 80/20</p>
+                        <p className="text-sm text-slate-300 mt-1">Foco total nos tópicos que a Cesgranrio realmente cobra.</p>
                     </div>
-                    
-                    <div className="my-10 text-center">
-                        <p className="text-lg text-slate-400 line-through">De R$ 297,00</p>
-                        <p className="text-white text-sm">Por apenas 1x de</p>
-                        <p className="text-5xl font-extrabold text-amber-400 my-1">R$ 27,90</p>
-                        <p className="text-slate-300 font-medium">(Seu novo salário paga isso em <span className="font-bold text-white">menos de 2 horas</span>)</p>
+                    <div className="bg-slate-800/60 p-4 rounded-lg border border-slate-700">
+                        <p className="font-bold text-amber-300">✓ Conteúdo Verticalizado</p>
+                        <p className="text-sm text-slate-300 mt-1">Aulas e materiais sem enrolação, direto ao ponto.</p>
                     </div>
-
-                    <CountdownTimer />
-
-                    <div className="mt-6">
-                        <button
-                            onClick={handleCheckoutClick}
-                            className="w-full max-w-md mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
-                        >
-                            {stepData.ctaText}
-                        </button>
+                    <div className="bg-slate-800/60 p-4 rounded-lg border border-slate-700">
+                        <p className="font-bold text-amber-300">✓ Simulados Realistas</p>
+                        <p className="text-sm text-slate-300 mt-1">Treino exaustivo no formato exato da prova.</p>
                     </div>
                 </div>
+                
+                <div className="my-10 text-center">
+                    <p className="text-lg text-slate-400 line-through">De R$ 297,00</p>
+                    <p className="text-white text-sm">Por apenas 1x de</p>
+                    <p className="text-5xl font-extrabold text-amber-400 my-1">R$ 27,90</p>
+                    <p className="text-slate-300 font-medium">(Seu novo salário paga isso em <span className="font-bold text-white">menos de 2 horas</span>)</p>
+                </div>
+
+                <CountdownTimer />
+
+                <div className="mt-6">
+                    <button
+                        onClick={handleCheckoutClick}
+                        className="w-full max-w-md mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
+                    >
+                        {stepData.ctaText}
+                    </button>
+                </div>
+                
+                <div className="mt-4 max-w-md mx-auto">
+                    <div className="w-full border border-slate-700 rounded-lg p-3 flex items-center justify-center gap-3 text-slate-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <p className="text-sm font-medium">
+                            Envio imediato via e-mail e WhatsApp.
+                        </p>
+                    </div>
+                </div>
+
 
                 {/* Guarantee */}
                 <div className="flex items-center justify-center gap-4 mt-8 bg-slate-800/50 p-4 rounded-lg border border-slate-700 max-w-2xl mx-auto">
@@ -358,6 +364,7 @@ const App: React.FC = () => {
                 </div>
             </div>
         )}
+
 
         {/* CTA Button (appears on non-quiz/non-choice/non-offer steps) */}
         {!stepData.quiz && currentStep !== 8 && currentStep !== 9 && (

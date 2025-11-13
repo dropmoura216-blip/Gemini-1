@@ -9,7 +9,7 @@ const IntroLoader: React.FC = () => {
         // Start fade out before the component is unmounted in App.tsx
         const timer = setTimeout(() => {
             setIsFadingOut(true);
-        }, 3500); // Start fade out after 3.5 seconds
+        }, 2900); // Start fade out after 2.9 seconds
 
         return () => {
             clearTimeout(timer);

@@ -30,3 +30,22 @@ export interface FunnelStep {
     author: string;
   };
 }
+
+// Analytics Types
+export interface TrackingEvent {
+  timestamp: string;
+  type: 'APP_INIT' | 'STEP_VIEW' | 'CTA_CLICK' | 'QUIZ_ANSWER' | 'CHOICE_MADE' | 'CHECKOUT_CLICK';
+  details: Record<string, any>;
+}
+
+export interface SessionData {
+  sessionId: string;
+  startTime: string;
+  deviceInfo: {
+    userAgent: string;
+    platform: string;
+    screenWidth: number;
+    screenHeight: number;
+  };
+  events: TrackingEvent[];
+}

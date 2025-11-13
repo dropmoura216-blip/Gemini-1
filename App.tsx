@@ -8,6 +8,7 @@ import PillarCard from './components/PillarCard';
 import CountdownTimer from './components/CountdownTimer';
 import IntroLoader from './components/IntroLoader';
 import { FUNNEL_STEPS } from './constants';
+import { initSession, trackEvent } from './services/trackingService';
 import type { FunnelStep } from './types';
 
 const App: React.FC = () => {
@@ -19,14 +20,18 @@ const App: React.FC = () => {
   const totalSteps = FUNNEL_STEPS.length;
 
   useEffect(() => {
+    initSession();
     const introTimer = setTimeout(() => {
       setShowIntro(false);
-    }, 4000); // A introdução dura 4 segundos
+    }, 3400); // A introdução dura 3.4 segundos
 
     return () => clearTimeout(introTimer);
   }, []);
 
   useEffect(() => {
+    // Track step views
+    trackEvent('STEP_VIEW', { step: currentStep });
+
     // Reset and hide notification when step changes
     setShowNotification(false);
     if (currentStep === 1) {
@@ -52,24 +57,45 @@ const App: React.FC = () => {
     }
   }, [currentStep]);
 
+  const advanceToStep = (stepNumber: number) => {
+    if (stepNumber <= totalSteps) {
+      setCurrentStep(stepNumber);
+    }
+  };
 
-  const handleNextStep = () => {
+  const handleCtaClick = () => {
+    const stepData = FUNNEL_STEPS.find(s => s.step === currentStep);
+    if (!stepData) return;
+
+    trackEvent('CTA_CLICK', { step: currentStep, ctaText: stepData.ctaText });
+
     if (currentStep === 1) {
       setShowPreQuizModal(true);
       return;
     }
-    if (currentStep < totalSteps) {
-      setCurrentStep(prev => prev + 1);
-    } else {
-      // Handle final CTA click - e.g., redirect to checkout
-      console.log('Redirecting to checkout...');
-      window.location.href = 'https://checkout.example.com';
-    }
+    advanceToStep(currentStep + 1);
+  };
+
+  const handleQuizAnswer = (optionText: string, question: string) => {
+    trackEvent('QUIZ_ANSWER', { step: currentStep, question, answer: optionText });
+    advanceToStep(currentStep + 1);
+  };
+
+  const handleChoiceClick = () => {
+    trackEvent('CHOICE_MADE', { step: 8, choice: 'Aprovado' });
+    advanceToStep(currentStep + 1);
+  };
+
+  const handleCheckoutClick = () => {
+    trackEvent('CHECKOUT_CLICK', { step: 9 });
+    console.log('Redirecting to checkout...');
+    // In a real scenario, you would redirect here:
+    // window.location.href = 'https://checkout.example.com';
   };
   
   const handleConfirmQuiz = () => {
     setShowPreQuizModal(false);
-    setCurrentStep(2);
+    advanceToStep(2);
   };
 
   const handleDeclineQuiz = () => {
@@ -108,7 +134,7 @@ const App: React.FC = () => {
           <div className="mt-8 max-w-lg mx-auto w-full">
             <h2 className="text-xl md:text-2xl font-semibold text-amber-400 mb-4">{stepData.quiz.question}</h2>
             {stepData.quiz.options.map((option, index) => (
-              <QuizOption key={index} text={option.text} onClick={handleNextStep} />
+              <QuizOption key={index} text={option.text} onClick={() => handleQuizAnswer(option.text, stepData.quiz!.question)} />
             ))}
           </div>
         )}
@@ -139,7 +165,7 @@ const App: React.FC = () => {
             <div className="mt-8 w-full max-w-4xl mx-auto flex flex-col md:flex-row gap-6">
                 {/* Option 1 (Good): Ser Aprovado */}
                 <button
-                    onClick={handleNextStep}
+                    onClick={handleChoiceClick}
                     className="w-full flex-1 text-left bg-slate-800 border-2 border-amber-400/60 rounded-lg p-6 flex flex-col transform transition-all duration-300 hover:scale-[1.03] hover:border-amber-400 hover:shadow-2xl hover:shadow-amber-500/20 focus:outline-none focus:ring-4 focus:ring-amber-500/50"
                 >
                     <div className="flex-grow">
@@ -226,7 +252,7 @@ const App: React.FC = () => {
 
                     <div className="mt-6">
                         <button
-                            onClick={handleNextStep}
+                            onClick={handleCheckoutClick}
                             className="w-full max-w-md mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
                         >
                             {stepData.ctaText}
@@ -255,7 +281,7 @@ const App: React.FC = () => {
                 <div className="mt-8">
                     <div className="relative inline-block">
                         <button
-                            onClick={handleNextStep}
+                            onClick={handleCtaClick}
                             className="bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
                         >
                             {stepData.ctaText}
@@ -272,7 +298,7 @@ const App: React.FC = () => {
                   }>
                     <div className="relative inline-block">
                       <button
-                        onClick={handleNextStep}
+                        onClick={handleCtaClick}
                         className="bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
                       >
                         {stepData.ctaText}
@@ -399,7 +425,7 @@ const App: React.FC = () => {
         to { width: 100%; }
     }
     .animate-progress-bar {
-        animation: progress-bar 4s linear forwards;
+        animation: progress-bar 3.4s linear forwards;
     }
   `;
 

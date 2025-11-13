@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useRef } from 'react';
 import ProgressBar from './components/ProgressBar';
 import StepContainer from './components/StepContainer';
@@ -21,6 +22,7 @@ const App: React.FC = () => {
   const [showIntro, setShowIntro] = useState(true);
   const [showStickyButton, setShowStickyButton] = useState(false);
   const [showExitIntentModal, setShowExitIntentModal] = useState(false);
+  const [showStep8Notification, setShowStep8Notification] = useState(false);
   
   // State for the final modal button delay
   const [isFinalModalButtonDelayed, setIsFinalModalButtonDelayed] = useState(false);
@@ -82,6 +84,7 @@ const App: React.FC = () => {
     // Reset and hide notifications when step changes
     setShowNotification(false);
     setShowFinalModal(false);
+    setShowStep8Notification(false);
     // Stop any running timers when step changes
     if (finalModalButtonTimerRef.current) clearInterval(finalModalButtonTimerRef.current);
 
@@ -89,6 +92,13 @@ const App: React.FC = () => {
         const timer = setTimeout(() => {
             setShowNotification(true);
         }, 1500); // Show notification after 1.5s on step 1
+        return () => clearTimeout(timer);
+    }
+
+    if (currentStep === 8) {
+        const timer = setTimeout(() => {
+            setShowStep8Notification(true);
+        }, 1500); // Show notification after 1.5s on step 8
         return () => clearTimeout(timer);
     }
     
@@ -256,28 +266,38 @@ const App: React.FC = () => {
         {currentStep === 8 && (
             <div className="mt-8 w-full max-w-4xl mx-auto flex flex-col md:flex-row gap-6">
                 {/* Option 1 (Good): Ser Aprovado */}
-                <button
-                    onClick={handleChoiceClick}
-                    className="w-full flex-1 text-left bg-slate-800 border-2 border-amber-400/60 rounded-lg p-6 flex flex-col transform transition-all duration-300 hover:scale-[1.03] hover:border-amber-400 hover:shadow-2xl hover:shadow-amber-500/20 focus:outline-none focus:ring-4 focus:ring-amber-500/50"
-                >
-                    <div className="flex-grow">
-                        <h3 className="font-bold text-lg text-amber-300 mb-3 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            OPÇÃO 1: Ser Aprovado(a)
-                        </h3>
-                        <ul className="list-none space-y-2 text-slate-300 text-sm">
-                            <li>- Salário inicial de <span className="font-bold text-white">R$ 16.495/mês</span> <span className="font-medium text-amber-300 opacity-90">+ R$ 2.000 VA</span>.</li>
-                            <li>- <span className="font-bold text-white">Estabilidade e segurança</span> para o seu futuro.</li>
-                            <li>- Benefícios exclusivos e <span className="font-bold text-white">plano de carreira</span> na Caixa.</li>
-                        </ul>
-                    </div>
-                    <div className="mt-5 border-t border-slate-700/60 pt-4 flex items-center justify-center gap-2 text-amber-300 font-semibold animate-pulse-gentle">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
-                        </svg>
-                        <span>Selecionar esta opção</span>
-                    </div>
-                </button>
+                <div className="relative w-full flex-1">
+                    <button
+                        onClick={handleChoiceClick}
+                        className="w-full h-full text-left bg-slate-800 border-2 border-amber-400/60 rounded-lg p-6 flex flex-col transform transition-[transform,border-color] duration-300 hover:scale-[1.03] hover:border-amber-400 hover:shadow-2xl hover:shadow-amber-500/20 focus:outline-none focus:ring-4 focus:ring-amber-500/50 will-change-transform animate-pulse-slow"
+                    >
+                        <div className="flex-grow">
+                            <h3 className="font-bold text-lg text-amber-300 mb-3 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                OPÇÃO 1: Ser Aprovado(a)
+                            </h3>
+                            <ul className="list-none space-y-2 text-slate-300 text-sm">
+                                <li>- Salário inicial de <span className="font-bold text-white">R$ 16.495/mês</span> <span className="font-medium text-amber-300 opacity-90">+ R$ 2.000 VA</span>.</li>
+                                <li>- <span className="font-bold text-white">Estabilidade e segurança</span> para o seu futuro.</li>
+                                <li>- Benefícios exclusivos e <span className="font-bold text-white">plano de carreira</span> na Caixa.</li>
+                            </ul>
+                        </div>
+                        <div className="mt-5 border-t border-slate-700/60 pt-4 flex items-center justify-center gap-2 text-amber-300 font-semibold animate-pulse-gentle">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
+                            </svg>
+                            <span>Selecionar esta opção</span>
+                        </div>
+                    </button>
+                    {showStep8Notification && (
+                        <div className="absolute bottom-full mb-4 w-max max-w-xs bg-slate-800 border border-amber-500/50 rounded-lg p-4 text-center shadow-lg left-1/2 -translate-x-1/2 animate-fade-in-up z-10">
+                            <div className="absolute left-1/2 -translate-x-1/2 bottom-[-8px] w-4 h-4 bg-slate-800 border-r border-b border-amber-500/50 transform rotate-45"></div>
+                            <p className="text-white text-sm font-medium">
+                                Clique nesta opção caso você queira passar no concurso da Caixa.
+                            </p>
+                        </div>
+                    )}
+                </div>
 
                 {/* Option 2 (Bad): Tentar a Sorte */}
                 <div className="w-full flex-1 bg-slate-800/40 border border-red-500/30 rounded-lg p-6 opacity-80 text-left">
@@ -343,7 +363,7 @@ const App: React.FC = () => {
                 <div className="mt-6">
                     <button
                         onClick={handleCheckoutClick}
-                        className="w-full max-w-md mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
+                        className="w-full max-w-md mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow will-change-transform"
                     >
                         {stepData.ctaText}
                     </button>
@@ -384,7 +404,7 @@ const App: React.FC = () => {
                     <div className="relative inline-block">
                         <button
                             onClick={handleCtaClick}
-                            className="bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
+                            className="bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow will-change-transform"
                         >
                             {stepData.ctaText}
                         </button>
@@ -401,7 +421,7 @@ const App: React.FC = () => {
                     <div className="relative inline-block">
                         <button
                             onClick={handleCtaClick}
-                            className="bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
+                            className="bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow will-change-transform"
                         >
                             {stepData.ctaText}
                         </button>
@@ -425,7 +445,7 @@ const App: React.FC = () => {
   const animationStyles = `
     @keyframes pulse-slow {
       50% {
-        box-shadow: 0 0 0 10px rgba(251, 191, 36, 0.1), 0 0 0 20px rgba(251, 191, 36, 0.05);
+        transform: scale(1.02);
       }
     }
     .animate-pulse-slow {
@@ -551,7 +571,7 @@ const App: React.FC = () => {
                 <div className="flex flex-col gap-4 mt-8">
                     <button
                     onClick={handleConfirmQuiz}
-                    className="w-full bg-amber-400 text-slate-900 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-105 p-4 flex flex-col items-center"
+                    className="w-full bg-amber-400 text-slate-900 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 p-4 flex flex-col items-center will-change-transform"
                     >
                     <span className="font-bold text-lg">
                         Sem problemas! Quero passar no concurso da Caixa.
@@ -589,7 +609,7 @@ const App: React.FC = () => {
                             ) : (
                                 <button
                                     onClick={handleCloseFinalModal}
-                                    className="w-full max-w-sm mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
+                                    className="w-full max-w-sm mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow will-change-transform"
                                 >
                                     Continuar
                                 </button>
@@ -612,7 +632,7 @@ const App: React.FC = () => {
                         <div className="mt-8">
                             <button
                                 onClick={() => setShowExitIntentModal(false)}
-                                className="w-full max-w-sm mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50"
+                                className="w-full max-w-sm mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 will-change-transform"
                             >
                                 CONTINUAR E VER O MÉTODO
                             </button>

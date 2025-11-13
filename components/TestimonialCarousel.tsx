@@ -59,7 +59,8 @@ const TestimonialCarousel: React.FC<TestimonialCarouselProps> = ({ testimonials 
                 alt="Depoimento de aluno"
                 className="w-full h-full object-contain"
                 loading={index === 0 ? "eager" : "lazy"}
-                fetchpriority={index === 0 ? "high" : "auto"}
+                // Fix: Corrected 'fetchpriority' to 'fetchPriority' to match React's property naming for the fetchpriority attribute.
+                fetchPriority={index === 0 ? "high" : "auto"}
                 decoding="async"
               />
             ) : (

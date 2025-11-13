@@ -76,14 +76,12 @@ export const FUNNEL_STEPS: FunnelStep[] = [
     step: 1,
     preheadline: (
       <>
-        Para Engenheiros(as) Civis que buscam um salário de R$ 16.495/mês{" "}
-        <span className="opacity-80 font-medium">+ R$ 2.000 VA</span>
+        <span className="text-amber-400 font-bold">12 ANOS DE ESPERA.</span> <span className="text-amber-400">Não Estude Como a Concorrência. Este É o Único Método Para Vencer a Cesgranrio e Garantir sua Vaga.</span>
       </>
     ),
     headline: (
       <>
-        A Cesgranrio usará 3 armadilhas para eliminar 92% dos engenheiros.{' '}
-        <span className="text-amber-400">O Método Decifrado blinda você contra elas.</span>
+        A Estratégia Exata para <span className="text-amber-400">Vencer a Cesgranrio</span> e <span className="text-amber-400">Garantir sua Vaga</span> como Engenheiro(a) Civil na Caixa.
       </>
     ),
     ctaText: "CONHECER O MÉTODO",
@@ -118,7 +116,7 @@ export const FUNNEL_STEPS: FunnelStep[] = [
     step: 4,
     headline: "Diagnóstico Estratégico: Etapa 3 de 3",
     quiz: {
-      question: "Com apenas 103 vagas imediatas e um salário de R$ 16.495/mês + R$ 2.000 VA, qual sua posição sobre o risco?",
+      question: "Com apenas 103 vagas imediatas e um salário de R$ 16.495/mês + R$ 2.500 VA, qual sua posição sobre o risco?",
       options: [
         { text: "Estou disposto a arriscar com uma estratégia genérica e não validada.", icon: <GenericIcon /> },
         { text: "A concorrência me assusta, mas confio que estudar 'muito' será o suficiente.", icon: <OverworkingIcon /> },

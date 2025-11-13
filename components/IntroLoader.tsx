@@ -36,7 +36,7 @@ const IntroLoader: React.FC = () => {
                         Salário de R$ 16.495/mês
                     </p>
                     <p className="text-base sm:text-lg text-slate-300 font-medium">
-                        + R$ 2.000 de Vale Alimentação
+                        + R$ 2.500 de Vale Alimentação
                     </p>
                 </div>
             </div>

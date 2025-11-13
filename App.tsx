@@ -1,7 +1,3 @@
-
-
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import ProgressBar from './components/ProgressBar';
 import StepContainer from './components/StepContainer';
@@ -219,7 +215,7 @@ const App: React.FC = () => {
         {currentStep !== 9 && (
           <>
             {stepData.preheadline && (
-              <p className="text-base sm:text-lg font-semibold text-amber-400 tracking-wider uppercase mb-3">
+              <p className={`font-semibold tracking-wider uppercase mb-3 ${currentStep === 1 ? 'text-sm sm:text-base' : 'text-base sm:text-lg text-amber-400'}`}>
                 {stepData.preheadline}
               </p>
             )}
@@ -296,8 +292,8 @@ const App: React.FC = () => {
                 </div>
 
                 {/* Option 2 (Bad): Tentar a Sorte */}
-                <div className="w-full flex-1 bg-slate-800/40 border border-red-500/30 rounded-lg p-6 opacity-80 text-left">
-                    <h3 className="font-bold text-lg text-red-400 mb-3 flex items-center gap-2">
+                <div className="w-full flex-1 bg-slate-800/40 border border-amber-500/30 rounded-lg p-6 opacity-80 text-left">
+                    <h3 className="font-bold text-lg text-amber-400 mb-3 flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                         OPÇÃO 2: Tentar a Sorte
                     </h3>
@@ -434,10 +430,10 @@ const App: React.FC = () => {
                         )}
 
                        {currentStep === 1 && showNotification && (
-                            <div className="absolute top-full mt-4 w-max max-w-sm sm:max-w-md bg-slate-800 border border-red-500/50 rounded-lg p-4 text-center shadow-lg left-1/2 -translate-x-1/2 animate-fade-in-up">
-                                <div className="absolute left-1/2 -translate-x-1/2 top-[-8px] w-4 h-4 bg-slate-800 border-l border-t border-red-500/50 transform rotate-45"></div>
+                            <div className="absolute top-full mt-4 w-max max-w-sm sm:max-w-md bg-slate-800 border border-amber-500/50 rounded-lg p-4 text-center shadow-lg left-1/2 -translate-x-1/2 animate-fade-in-up">
+                                <div className="absolute left-1/2 -translate-x-1/2 top-[-8px] w-4 h-4 bg-slate-800 border-l border-t border-amber-500/50 transform rotate-45"></div>
                                 <p className="text-white text-sm sm:text-base">
-                                    <span className="font-bold text-red-500">LEMBRE-SE:</span> A projeção é de <span className="font-bold text-red-500">500+ candidatos por vaga.</span> Apenas uma estratégia validada coloca você na frente.
+                                  Clique <span className="font-bold text-amber-400">AQUI SOMENTE</span> se você <span className="font-bold text-amber-400">REALMENTE</span> quer garantir a vaga e ganhar um salário de <span className="font-bold text-white">R$ 16.495 + R$ 2.500 VA.</span>
                                 </p>
                             </div>
                         )}
@@ -598,7 +594,7 @@ const App: React.FC = () => {
                         Sem problemas! Quero passar no concurso da Caixa.
                     </span>
                     <span className="text-sm font-medium text-slate-800/90 mt-1">
-                        E garantir meu salário de R$ 16.495/mês + R$ 2.000 VA
+                        E garantir meu salário de R$ 16.495/mês + R$ 2.500 VA
                     </span>
                     </button>
                     <button
@@ -614,10 +610,10 @@ const App: React.FC = () => {
 
             {showFinalModal && (
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] p-4 animate-fade-in-fast">
-                    <div className="bg-slate-800 border-2 border-red-500/80 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-red-500/20 transform animate-scale-in">
-                        <h2 className="text-2xl sm:text-3xl font-bold text-red-500 mb-4">NÃO DEIXE ESCAPAR!</h2>
+                    <div className="bg-slate-800 border-2 border-amber-500/80 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-amber-500/20 transform animate-scale-in">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-amber-400 mb-4">NÃO DEIXE ESCAPAR!</h2>
                         <p className="text-lg md:text-xl text-slate-200 leading-relaxed">
-                           <span className="font-bold text-red-500">12 anos de espera. 500+ candidatos por vaga.</span> Esta é a sua <span className="font-bold text-amber-400">chance de sair na frente!</span> Clique em CONTINUAR e garanta seu método!
+                           <span className="font-bold text-amber-400">12 anos de espera. 500+ candidatos por vaga.</span> Esta é a sua <span className="font-bold text-amber-400">chance de sair na frente!</span> Clique em CONTINUAR e garanta seu método!
                         </p>
                         <div className="mt-8">
                              {isFinalModalButtonDelayed ? (
@@ -642,10 +638,10 @@ const App: React.FC = () => {
 
             {showExitIntentModal && (
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] p-4 animate-fade-in-fast">
-                    <div className="bg-slate-800 border-2 border-red-500/80 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-red-500/20 transform animate-scale-in">
-                        <h2 className="text-2xl sm:text-3xl font-bold text-red-400 mb-4">ESPERE! LEMBRE-SE DISSO:</h2>
+                    <div className="bg-slate-800 border-2 border-amber-500/80 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-amber-500/20 transform animate-scale-in">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-amber-400 mb-4">ESPERE! LEMBRE-SE DISSO:</h2>
                         <p className="text-lg md:text-xl text-slate-200">
-                            Faz <span className="font-bold text-white">12 anos</span> que não há um concurso como este. A projeção é de <span className="font-bold text-red-400">500+ candidatos por vaga.</span>
+                            Faz <span className="font-bold text-white">12 anos</span> que não há um concurso como este. A projeção é de <span className="font-bold text-amber-400">500+ candidatos por vaga.</span>
                         </p>
                         <p className="text-lg md:text-xl text-slate-200 mt-2">
                             Você tem certeza que quer desperdiçar esta chance única?

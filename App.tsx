@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect, useRef } from 'react';
 import ProgressBar from './components/ProgressBar';
 import StepContainer from './components/StepContainer';
@@ -26,6 +27,8 @@ const App: React.FC = () => {
   const finalModalButtonTimerRef = useRef<number | null>(null);
 
   const exitIntentTriggered = useRef(false);
+  // Ref to prevent duplicate tracking in React.StrictMode
+  const lastTrackedStepRef = useRef<number | null>(null);
   const totalSteps = FUNNEL_STEPS.length;
 
   useEffect(() => {
@@ -69,8 +72,11 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Track step views
-    trackEvent('STEP_VIEW', { step: currentStep });
+    // Track step views, preventing duplicates from StrictMode
+    if (lastTrackedStepRef.current !== currentStep) {
+        trackEvent('STEP_VIEW', { step: currentStep });
+        lastTrackedStepRef.current = currentStep;
+    }
 
     // Reset and hide notifications when step changes
     setShowNotification(false);

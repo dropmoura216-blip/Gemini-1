@@ -1,5 +1,7 @@
 
 import type { SessionData, TrackingEvent } from '../types';
+import { db } from './firebase';
+import { doc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 
 const STORAGE_KEY = 'funnelAnalytics';
 
@@ -25,6 +27,11 @@ export const initSession = () => {
   let session = getSessionData();
   if (!session) {
     const sessionId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const initEvent: TrackingEvent = {
+        timestamp: new Date().toISOString(),
+        type: 'APP_INIT',
+        details: { sessionId }
+    };
     session = {
       sessionId,
       startTime: new Date().toISOString(),
@@ -34,10 +41,15 @@ export const initSession = () => {
         screenWidth: window.screen.width,
         screenHeight: window.screen.height,
       },
-      events: [],
+      events: [initEvent],
     };
     setSessionData(session);
-    trackEvent('APP_INIT', { sessionId });
+    
+    // Save the entire new session object to Firestore (fire-and-forget)
+    setDoc(doc(db, 'sessions', session.sessionId), session)
+        .catch(error => {
+            console.error("Error creating session in Firestore", error);
+        });
   }
 };
 
@@ -67,6 +79,8 @@ export const trackEvent = (
    *
    * 'CHOICE_MADE': Visitante fez a escolha na etapa 8. Momento crucial de decisão.
    *
+   * 'EXIT_INTENT_TRIGGERED': Visitante tentou sair da página (mouse saiu da janela ou usou o botão voltar). Indica um ponto de abandono.
+   *
    * 'CHECKOUT_CLICK': Visitante clicou no botão final para ir ao pagamento.
    *   - Exemplo: { "type": "CHECKOUT_CLICK", "details": { "step": 9 } }
    *   - Análise: Este evento significa que "visitante foi pro checkout". É o evento de conversão principal.
@@ -80,6 +94,18 @@ export const trackEvent = (
 
   session.events.push(newEvent);
   setSessionData(session);
+
+  // Update in Firestore (fire-and-forget)
+  const sessionDocRef = doc(db, 'sessions', session.sessionId);
+  updateDoc(sessionDocRef, {
+      events: arrayUnion(newEvent)
+  }).catch(error => {
+      // If the document doesn't exist, it might have been deleted or failed to create.
+      // As a fallback, we can try to re-create it with the current session state.
+      console.warn("Failed to update session in Firestore, attempting to recreate.", error);
+      setDoc(sessionDocRef, session, { merge: true })
+          .catch(e => console.error("Error recreating session in Firestore", e));
+  });
 };
 
 export const getAnalytics = (): SessionData | null => {
@@ -87,9 +113,10 @@ export const getAnalytics = (): SessionData | null => {
 };
 
 export const clearAnalytics = () => {
+    // Note: This only clears local storage. It does not affect data sent to Firestore.
     try {
         localStorage.removeItem(STORAGE_KEY);
-        console.log("Analytics data cleared.");
+        console.log("Analytics data cleared from localStorage.");
     } catch(error) {
         console.error("Error clearing analytics data", error);
     }

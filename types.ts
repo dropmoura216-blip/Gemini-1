@@ -34,7 +34,8 @@ export interface FunnelStep {
 // Analytics Types
 export interface TrackingEvent {
   timestamp: string;
-  type: 'APP_INIT' | 'STEP_VIEW' | 'CTA_CLICK' | 'QUIZ_ANSWER' | 'CHOICE_MADE' | 'CHECKOUT_CLICK';
+  // Fix: Add 'EXIT_INTENT_TRIGGERED' to the type union to allow it as a valid event type.
+  type: 'APP_INIT' | 'STEP_VIEW' | 'CTA_CLICK' | 'QUIZ_ANSWER' | 'CHOICE_MADE' | 'CHECKOUT_CLICK' | 'EXIT_INTENT_TRIGGERED';
   details: Record<string, any>;
 }
 

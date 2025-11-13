@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ProgressBar from './components/ProgressBar';
 import StepContainer from './components/StepContainer';
 import QuizOption from './components/QuizOption';
@@ -14,9 +14,18 @@ import type { FunnelStep } from './types';
 const App: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showNotification, setShowNotification] = useState(false);
+  const [showFinalModal, setShowFinalModal] = useState(false);
   const [showPreQuizModal, setShowPreQuizModal] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
   const [showStickyButton, setShowStickyButton] = useState(false);
+  const [showExitIntentModal, setShowExitIntentModal] = useState(false);
+  
+  // State for the final modal button delay
+  const [isFinalModalButtonDelayed, setIsFinalModalButtonDelayed] = useState(false);
+  const [finalModalButtonDelaySeconds, setFinalModalButtonDelaySeconds] = useState(3);
+  const finalModalButtonTimerRef = useRef<number | null>(null);
+
+  const exitIntentTriggered = useRef(false);
   const totalSteps = FUNNEL_STEPS.length;
 
   useEffect(() => {
@@ -29,18 +38,84 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    // Exit Intent Logic
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY <= 0 && !exitIntentTriggered.current) {
+        exitIntentTriggered.current = true;
+        setShowExitIntentModal(true);
+        trackEvent('EXIT_INTENT_TRIGGERED', { reason: 'mouseleave' });
+      }
+    };
+
+    const handlePopState = () => {
+      if (!exitIntentTriggered.current) {
+        exitIntentTriggered.current = true;
+        setShowExitIntentModal(true);
+        window.history.pushState(null, '', window.location.href);
+        trackEvent('EXIT_INTENT_TRIGGERED', { reason: 'popstate' });
+      }
+    };
+    
+    // Add an initial state to the history to catch the first back attempt.
+    window.history.pushState(null, '', window.location.href);
+
+    document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
+  useEffect(() => {
     // Track step views
     trackEvent('STEP_VIEW', { step: currentStep });
 
-    // Reset and hide notification when step changes
+    // Reset and hide notifications when step changes
     setShowNotification(false);
+    setShowFinalModal(false);
+    // Stop any running timers when step changes
+    if (finalModalButtonTimerRef.current) clearInterval(finalModalButtonTimerRef.current);
+
     if (currentStep === 1) {
         const timer = setTimeout(() => {
             setShowNotification(true);
         }, 1500); // Show notification after 1.5s on step 1
         return () => clearTimeout(timer);
     }
+    
+    if (currentStep === 9) {
+        const timer = setTimeout(() => {
+            setShowFinalModal(true);
+            setIsFinalModalButtonDelayed(true);
+            setFinalModalButtonDelaySeconds(2); // Inicia o contador em 2
+        }, 1000); // Show modal after 1s on step 9
+        return () => clearTimeout(timer);
+    }
   }, [currentStep]);
+  
+  // Timer for the final modal button
+  useEffect(() => {
+    if (isFinalModalButtonDelayed) {
+      finalModalButtonTimerRef.current = window.setInterval(() => {
+        setFinalModalButtonDelaySeconds((prev) => {
+          if (prev <= 1) {
+            clearInterval(finalModalButtonTimerRef.current!);
+            setIsFinalModalButtonDelayed(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 750); // Roda a cada 750ms, totalizando 1.5s
+    }
+    return () => {
+      if (finalModalButtonTimerRef.current) {
+        clearInterval(finalModalButtonTimerRef.current);
+      }
+    };
+  }, [isFinalModalButtonDelayed]);
+
 
   useEffect(() => {
     // Hide sticky button immediately when step changes
@@ -100,6 +175,10 @@ const App: React.FC = () => {
 
   const handleDeclineQuiz = () => {
     setShowPreQuizModal(false);
+  };
+  
+  const handleCloseFinalModal = () => {
+    setShowFinalModal(false);
   };
 
   const renderStepContent = () => {
@@ -297,12 +376,12 @@ const App: React.FC = () => {
                     : "mt-8"
                   }>
                     <div className="relative inline-block">
-                      <button
-                        onClick={handleCtaClick}
-                        className="bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
-                      >
-                        {stepData.ctaText}
-                      </button>
+                        <button
+                            onClick={handleCtaClick}
+                            className="bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
+                        >
+                            {stepData.ctaText}
+                        </button>
                        {currentStep === 1 && showNotification && (
                             <div className="absolute top-full mt-4 w-max max-w-sm sm:max-w-md bg-slate-800 border border-red-500/50 rounded-lg p-4 text-center shadow-lg left-1/2 -translate-x-1/2 animate-fade-in-up">
                                 <div className="absolute left-1/2 -translate-x-1/2 top-[-8px] w-4 h-4 bg-slate-800 border-l border-t border-red-500/50 transform rotate-45"></div>
@@ -467,6 +546,56 @@ const App: React.FC = () => {
                 </div>
                 </div>
             </div>
+            )}
+
+            {showFinalModal && (
+                <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] p-4 animate-fade-in-fast">
+                    <div className="bg-slate-800 border-2 border-red-500/80 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-red-500/20 transform animate-scale-in">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-red-500 mb-4">NÃO DEIXE ESCAPAR!</h2>
+                        <p className="text-lg md:text-xl text-slate-200 leading-relaxed">
+                           12 anos de espera. 500+ candidatos por vaga. Esta é a sua chance de ouro. Clique em CONTINUAR e garanta seu método!
+                        </p>
+                        <div className="mt-8">
+                             {isFinalModalButtonDelayed ? (
+                                <button
+                                    disabled
+                                    className="w-full max-w-sm mx-auto bg-slate-700 text-slate-500 font-bold text-lg py-4 px-10 rounded-lg shadow-inner cursor-not-allowed transition-colors duration-300"
+                                >
+                                    Continuar ({finalModalButtonDelaySeconds})
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={handleCloseFinalModal}
+                                    className="w-full max-w-sm mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow"
+                                >
+                                    Continuar
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showExitIntentModal && (
+                <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] p-4 animate-fade-in-fast">
+                    <div className="bg-slate-800 border-2 border-red-500/80 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-red-500/20 transform animate-scale-in">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-red-400 mb-4">ESPERE! LEMBRE-SE DISSO:</h2>
+                        <p className="text-lg md:text-xl text-slate-200">
+                            Faz <span className="font-bold text-white">12 anos</span> que não há um concurso como este. A projeção é de <span className="font-bold text-red-400">500+ candidatos por vaga.</span>
+                        </p>
+                        <p className="text-lg md:text-xl text-slate-200 mt-2">
+                            Você tem certeza que quer desperdiçar esta chance única?
+                        </p>
+                        <div className="mt-8">
+                            <button
+                                onClick={() => setShowExitIntentModal(false)}
+                                className="w-full max-w-sm mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-all duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50"
+                            >
+                                CONTINUAR E VER O MÉTODO
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
       )}

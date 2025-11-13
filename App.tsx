@@ -415,12 +415,24 @@ const App: React.FC = () => {
                     : "mt-8"
                   }>
                     <div className="relative inline-block">
-                        <button
-                            onClick={handleCtaClick}
-                            className="bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow will-change-transform"
-                        >
-                            {stepData.ctaText}
-                        </button>
+                        {currentStep === 1 ? (
+                            <div className="p-1.5 border-2 border-white/50 rounded-[14px] animate-pulse-white-border will-change-[border-color,transform]">
+                                <button
+                                    onClick={handleCtaClick}
+                                    className="bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow will-change-transform"
+                                >
+                                    {stepData.ctaText}
+                                </button>
+                            </div>
+                        ) : (
+                             <button
+                                onClick={handleCtaClick}
+                                className="bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow will-change-transform"
+                            >
+                                {stepData.ctaText}
+                            </button>
+                        )}
+
                        {currentStep === 1 && showNotification && (
                             <div className="absolute top-full mt-4 w-max max-w-sm sm:max-w-md bg-slate-800 border border-red-500/50 rounded-lg p-4 text-center shadow-lg left-1/2 -translate-x-1/2 animate-fade-in-up">
                                 <div className="absolute left-1/2 -translate-x-1/2 top-[-8px] w-4 h-4 bg-slate-800 border-l border-t border-red-500/50 transform rotate-45"></div>
@@ -439,6 +451,19 @@ const App: React.FC = () => {
   };
   
   const animationStyles = `
+    @keyframes pulse-white-border {
+        0%, 100% {
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.0);
+        }
+        50% {
+            border-color: rgba(255, 255, 255, 1);
+            transform: scale(1.03);
+        }
+    }
+    .animate-pulse-white-border {
+        animation: pulse-white-border 2.5s infinite ease-in-out;
+    }
     @keyframes pulse-slow {
       50% {
         transform: scale(1.02);

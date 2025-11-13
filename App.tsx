@@ -1,6 +1,7 @@
 
 
 
+
 import React, { useState, useEffect, useRef } from 'react';
 import ProgressBar from './components/ProgressBar';
 import StepContainer from './components/StepContainer';
@@ -72,10 +73,10 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Track step views, preventing duplicates from StrictMode
-    if (lastTrackedStepRef.current !== currentStep) {
-        trackEvent('STEP_VIEW', { step: currentStep });
-        lastTrackedStepRef.current = currentStep;
+    // Track ONLY the initial step view, preventing duplicates from StrictMode
+    if (currentStep === 1 && lastTrackedStepRef.current !== 1) {
+      trackEvent('STEP_VIEW', { step: 1 });
+      lastTrackedStepRef.current = 1;
     }
 
     // Reset and hide notifications when step changes

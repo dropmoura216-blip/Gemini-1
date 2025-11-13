@@ -10,6 +10,9 @@ import { FUNNEL_STEPS } from './constants';
 import { initSession, trackEvent } from './services/trackingService';
 import type { FunnelStep } from './types';
 
+// Declare fbq for Meta Pixel
+declare const fbq: any;
+
 const App: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showNotification, setShowNotification] = useState(false);
@@ -167,6 +170,12 @@ const App: React.FC = () => {
 
   const handleCheckoutClick = () => {
     trackEvent('CHECKOUT_CLICK', { step: 9 });
+    
+    // Track Meta Pixel event for initiating checkout
+    if (typeof fbq === 'function') {
+      fbq('track', 'InitiateCheckout');
+    }
+
     console.log('Redirecting to checkout...');
     // In a real scenario, you would redirect here:
     window.location.href = 'https://compraseguraonline.org.ua/c/75f2b7ce4a';

@@ -1,9 +1,12 @@
-
 import type { SessionData, TrackingEvent } from '../types';
 import { db } from './firebase';
 import { doc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 
 const STORAGE_KEY = 'funnelAnalytics';
+
+// State for preventing duplicate events
+let lastTrackedEvent: { type: string; details: string; timestamp: number } | null = null;
+const DUPLICATE_EVENT_THRESHOLD_MS = 500; // Ignore the same event if it occurs within 0.5 seconds
 
 const getSessionData = (): SessionData | null => {
   try {
@@ -57,6 +60,23 @@ export const trackEvent = (
   type: TrackingEvent['type'],
   details: Record<string, any> = {}
 ) => {
+  const now = Date.now();
+  const detailsString = JSON.stringify(details);
+
+  // Anti-duplication check: If the same event (type + details) was tracked very recently, ignore it.
+  if (
+    lastTrackedEvent &&
+    lastTrackedEvent.type === type &&
+    lastTrackedEvent.details === detailsString &&
+    (now - lastTrackedEvent.timestamp) < DUPLICATE_EVENT_THRESHOLD_MS
+  ) {
+    console.warn(`Duplicate event suppressed: ${type}`, details);
+    return; // Stop execution to prevent duplicate tracking
+  }
+  
+  // Update the last tracked event to the current one
+  lastTrackedEvent = { type, details: detailsString, timestamp: now };
+  
   const session = getSessionData();
   if (!session) {
     console.error("Tracking session not initialized.");

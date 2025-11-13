@@ -4,6 +4,7 @@ import React from 'react';
 export interface QuizOption {
   text: string;
   isCorrect?: boolean;
+  icon?: React.ReactNode;
 }
 
 export interface Quiz {

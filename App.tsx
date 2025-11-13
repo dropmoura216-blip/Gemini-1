@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect, useRef } from 'react';
 import ProgressBar from './components/ProgressBar';
 import StepContainer from './components/StepContainer';
@@ -236,7 +237,7 @@ const App: React.FC = () => {
           <div className="mt-8 max-w-lg mx-auto w-full">
             <h2 className="text-xl md:text-2xl font-semibold text-amber-400 mb-4">{stepData.quiz.question}</h2>
             {stepData.quiz.options.map((option, index) => (
-              <QuizOption key={index} text={option.text} onClick={() => handleQuizAnswer(option.text, stepData.quiz!.question)} />
+              <QuizOption key={index} text={option.text} icon={option.icon} onClick={() => handleQuizAnswer(option.text, stepData.quiz!.question)} />
             ))}
           </div>
         )}
@@ -596,7 +597,7 @@ const App: React.FC = () => {
                     <div className="bg-slate-800 border-2 border-red-500/80 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-red-500/20 transform animate-scale-in">
                         <h2 className="text-2xl sm:text-3xl font-bold text-red-500 mb-4">NÃO DEIXE ESCAPAR!</h2>
                         <p className="text-lg md:text-xl text-slate-200 leading-relaxed">
-                           12 anos de espera. 500+ candidatos por vaga. Esta é a sua chance de ouro. Clique em CONTINUAR e garanta seu método!
+                           <span className="font-bold text-red-500">12 anos de espera. 500+ candidatos por vaga.</span> Esta é a sua <span className="font-bold text-amber-400">chance de sair na frente!</span> Clique em CONTINUAR e garanta seu método!
                         </p>
                         <div className="mt-8">
                              {isFinalModalButtonDelayed ? (

@@ -4,7 +4,6 @@ import StepContainer from './components/StepContainer';
 import QuizOption from './components/QuizOption';
 import PillarCard from './components/PillarCard';
 import CountdownTimer from './components/CountdownTimer';
-import IntroLoader from './components/IntroLoader';
 import TestimonialCarousel from './components/TestimonialCarousel';
 import { FUNNEL_STEPS } from './constants';
 import { initSession, trackEvent } from './services/trackingService';
@@ -18,7 +17,6 @@ const App: React.FC = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [showFinalModal, setShowFinalModal] = useState(false);
   const [showPreQuizModal, setShowPreQuizModal] = useState(false);
-  const [showIntro, setShowIntro] = useState(true);
   const [showStickyButton, setShowStickyButton] = useState(false);
   const [showExitIntentModal, setShowExitIntentModal] = useState(false);
   const [showStep8Notification, setShowStep8Notification] = useState(false);
@@ -35,11 +33,6 @@ const App: React.FC = () => {
 
   useEffect(() => {
     initSession();
-    const introTimer = setTimeout(() => {
-      setShowIntro(false);
-    }, 3400); // A introdução dura 3.4 segundos
-
-    return () => clearTimeout(introTimer);
   }, []);
 
   useEffect(() => {
@@ -525,31 +518,6 @@ const App: React.FC = () => {
     .animate-scale-in {
         animation: scaleIn 0.3s ease-out forwards;
     }
-    @keyframes intro-fade-out {
-      from { opacity: 1; }
-      to { opacity: 0; visibility: hidden; }
-    }
-    .animate-intro-fade-out {
-        animation: intro-fade-out 0.5s ease-out forwards;
-    }
-
-    @keyframes intro-fade-in-scale {
-      from { opacity: 0; transform: scale(0.98); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    .animate-intro-fade-in-scale {
-      animation: intro-fade-in-scale 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
-
-    @keyframes intro-fade-in-up {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-intro-fade-in-up {
-      animation: intro-fade-in-up 1s ease-out forwards;
-      opacity: 0; /* Start hidden */
-    }
-    
     @keyframes bg-pan {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -559,106 +527,95 @@ const App: React.FC = () => {
       background-size: 200% 200%;
       animation: bg-pan 12s ease infinite;
     }
-    @keyframes progress-bar {
-        from { width: 0%; }
-        to { width: 100%; }
-    }
-    .animate-progress-bar {
-        animation: progress-bar 3.4s linear forwards;
-    }
   `;
 
   return (
     <>
       <style>{animationStyles}</style>
       
-      {showIntro && <IntroLoader />}
+      <div className="bg-slate-900 animate-fade-in-fast">
+          <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
+          {renderStepContent()}
+          
+          {showPreQuizModal && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 animate-fade-in-fast">
+              <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-amber-500/10 transform animate-scale-in">
+              <h2 className="text-2xl sm:text-3xl font-bold text-amber-400 mb-6">
+                  Será necessário responder 3 perguntas rápidas para liberar o método, tudo bem?
+              </h2>
+              <div className="flex flex-col gap-4 mt-8">
+                  <button
+                  onClick={handleConfirmQuiz}
+                  className="w-full bg-amber-400 text-slate-900 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 p-4 flex flex-col items-center will-change-transform"
+                  >
+                  <span className="font-bold text-lg">
+                      Sem problemas! Quero passar no concurso da Caixa.
+                  </span>
+                  <span className="text-sm font-medium text-slate-800/90 mt-1">
+                      E garantir meu salário de R$ 16.495/mês + R$ 2.500 VA
+                  </span>
+                  </button>
+                  <button
+                  onClick={handleDeclineQuiz}
+                  className="w-full text-slate-400 font-medium hover:text-white transition-colors duration-200 py-2"
+                  >
+                  Não, não quero passar no concurso.
+                  </button>
+              </div>
+              </div>
+          </div>
+          )}
 
-      {!showIntro && (
-        <div className="bg-slate-900 animate-fade-in-fast">
-            <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
-            {renderStepContent()}
-            
-            {showPreQuizModal && (
-            <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 animate-fade-in-fast">
-                <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-amber-500/10 transform animate-scale-in">
-                <h2 className="text-2xl sm:text-3xl font-bold text-amber-400 mb-6">
-                    Será necessário responder 3 perguntas rápidas para liberar o método, tudo bem?
-                </h2>
-                <div className="flex flex-col gap-4 mt-8">
-                    <button
-                    onClick={handleConfirmQuiz}
-                    className="w-full bg-amber-400 text-slate-900 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 p-4 flex flex-col items-center will-change-transform"
-                    >
-                    <span className="font-bold text-lg">
-                        Sem problemas! Quero passar no concurso da Caixa.
-                    </span>
-                    <span className="text-sm font-medium text-slate-800/90 mt-1">
-                        E garantir meu salário de R$ 16.495/mês + R$ 2.500 VA
-                    </span>
-                    </button>
-                    <button
-                    onClick={handleDeclineQuiz}
-                    className="w-full text-slate-400 font-medium hover:text-white transition-colors duration-200 py-2"
-                    >
-                    Não, não quero passar no concurso.
-                    </button>
-                </div>
-                </div>
-            </div>
-            )}
+          {showFinalModal && (
+              <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] p-4 animate-fade-in-fast">
+                  <div className="bg-slate-800 border-2 border-amber-500/80 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-amber-500/20 transform animate-scale-in">
+                      <h2 className="text-2xl sm:text-3xl font-bold text-amber-400 mb-4">NÃO DEIXE ESCAPAR!</h2>
+                      <p className="text-lg md:text-xl text-slate-200 leading-relaxed">
+                         <span className="font-bold text-amber-400">12 anos de espera. 500+ candidatos por vaga.</span> Esta é a sua <span className="font-bold text-amber-400">chance de sair na frente!</span> Clique em CONTINUAR e garanta seu método!
+                      </p>
+                      <div className="mt-8">
+                           {isFinalModalButtonDelayed ? (
+                              <button
+                                  disabled
+                                  className="w-full max-w-sm mx-auto bg-slate-700 text-slate-500 font-bold text-lg py-4 px-10 rounded-lg shadow-inner cursor-not-allowed transition-colors duration-300"
+                              >
+                                  Continuar ({finalModalButtonDelaySeconds})
+                              </button>
+                          ) : (
+                              <button
+                                  onClick={handleCloseFinalModal}
+                                  className="w-full max-w-sm mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow will-change-transform"
+                              >
+                                  Continuar
+                              </button>
+                          )}
+                      </div>
+                  </div>
+              </div>
+          )}
 
-            {showFinalModal && (
-                <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] p-4 animate-fade-in-fast">
-                    <div className="bg-slate-800 border-2 border-amber-500/80 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-amber-500/20 transform animate-scale-in">
-                        <h2 className="text-2xl sm:text-3xl font-bold text-amber-400 mb-4">NÃO DEIXE ESCAPAR!</h2>
-                        <p className="text-lg md:text-xl text-slate-200 leading-relaxed">
-                           <span className="font-bold text-amber-400">12 anos de espera. 500+ candidatos por vaga.</span> Esta é a sua <span className="font-bold text-amber-400">chance de sair na frente!</span> Clique em CONTINUAR e garanta seu método!
-                        </p>
-                        <div className="mt-8">
-                             {isFinalModalButtonDelayed ? (
-                                <button
-                                    disabled
-                                    className="w-full max-w-sm mx-auto bg-slate-700 text-slate-500 font-bold text-lg py-4 px-10 rounded-lg shadow-inner cursor-not-allowed transition-colors duration-300"
-                                >
-                                    Continuar ({finalModalButtonDelaySeconds})
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={handleCloseFinalModal}
-                                    className="w-full max-w-sm mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 animate-pulse-slow will-change-transform"
-                                >
-                                    Continuar
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {showExitIntentModal && (
-                <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] p-4 animate-fade-in-fast">
-                    <div className="bg-slate-800 border-2 border-amber-500/80 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-amber-500/20 transform animate-scale-in">
-                        <h2 className="text-2xl sm:text-3xl font-bold text-amber-400 mb-4">ESPERE! LEMBRE-SE DISSO:</h2>
-                        <p className="text-lg md:text-xl text-slate-200">
-                            Faz <span className="font-bold text-white">12 anos</span> que não há um concurso como este. A projeção é de <span className="font-bold text-amber-400">500+ candidatos por vaga.</span>
-                        </p>
-                        <p className="text-lg md:text-xl text-slate-200 mt-2">
-                            Você tem certeza que quer desperdiçar esta chance única?
-                        </p>
-                        <div className="mt-8">
-                            <button
-                                onClick={() => setShowExitIntentModal(false)}
-                                className="w-full max-w-sm mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 will-change-transform"
-                            >
-                                CONTINUAR E VER O MÉTODO
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
-      )}
+          {showExitIntentModal && (
+              <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] p-4 animate-fade-in-fast">
+                  <div className="bg-slate-800 border-2 border-amber-500/80 rounded-xl p-6 sm:p-8 max-w-lg w-full text-center shadow-2xl shadow-amber-500/20 transform animate-scale-in">
+                      <h2 className="text-2xl sm:text-3xl font-bold text-amber-400 mb-4">ESPERE! LEMBRE-SE DISSO:</h2>
+                      <p className="text-lg md:text-xl text-slate-200">
+                          Faz <span className="font-bold text-white">12 anos</span> que não há um concurso como este. A projeção é de <span className="font-bold text-amber-400">500+ candidatos por vaga.</span>
+                      </p>
+                      <p className="text-lg md:text-xl text-slate-200 mt-2">
+                          Você tem certeza que quer desperdiçar esta chance única?
+                      </p>
+                      <div className="mt-8">
+                          <button
+                              onClick={() => setShowExitIntentModal(false)}
+                              className="w-full max-w-sm mx-auto bg-amber-400 text-slate-900 font-bold text-lg py-4 px-10 rounded-lg shadow-lg shadow-amber-500/20 transform transition-[transform,background-color] duration-300 hover:bg-amber-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-500 focus:ring-opacity-50 will-change-transform"
+                          >
+                              CONTINUAR E VER O MÉTODO
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          )}
+      </div>
     </>
   );
 };
